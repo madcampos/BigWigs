@@ -6,7 +6,7 @@
 local mod, CL = BigWigs:NewBoss("Na'zak the Fiend", -1033, 1783)
 if not mod then return end
 mod:RegisterEnableMob(110321)
-mod.otherMenu = 1007
+mod.otherMenu = -1007
 mod.worldBoss = 110321
 
 --------------------------------------------------------------------------------
@@ -57,8 +57,7 @@ end
 -- Event Handlers
 --
 
-function mod:MarkWebWrap(event, unit)
-	local guid = UnitGUID(unit)
+function mod:MarkWebWrap(event, unit, guid)
 	if wraps[guid] then
 		SetRaidTarget(unit, wraps[guid])
 		wraps[guid] = nil

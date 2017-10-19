@@ -19,7 +19,7 @@ L.custom_start = "%s engagé - %s dans %d min."
 L.custom_start_s = "%s engagé - %s dans %d sec."
 L.duration = "%s pendant %s sec."
 L.focus_only = "|cffff0000Alertes de la cible de focalisation uniquement.|r "
-L.general = "Général"
+L.general = "Général" -- General settings, i.e. things that apply to normal, heroic and mythic mode.
 L.hard = "Mode difficile"
 L.heroic = "Mode héroïque"
 L.incoming = "Arrivée |2 %s !"
@@ -38,6 +38,8 @@ L.other = "%s : %s"
 L.over = "%s terminé !"
 L.phase = "Phase %d"
 L.removed = "%s enlevé"
+L.removed_from = "%s enlevé de %s"
+L.removed_by = "%s enlevé par %s" -- spell removed by player
 L.small_adds = "Petits adds"
 L.soon = "%s bientôt !"
 L.spawned = "%s apparu"
@@ -49,7 +51,20 @@ L.trash = "Trash"
 L.underyou = "%s en dessous de VOUS !"
 L.you = "%s sur VOUS !"
 
+L.active = "Actif" -- When a boss becomes active, after speech finishes
+
 -- Common raid marking locale
 L.marker = "Marquage %s"
 L.marker_player_desc = "Marque les joueurs affectés par %s avec %s. Nécessite d'être assistant ou chef de raid."
 L.marker_npc_desc = "Marque %s avec %s. Nécessite d'être assistant ou chef de raid."
+
+-- Ability where two players have to move close to each other
+L.link = "Lié(e) avec %s"
+L.link_short = "Lié : %s"
+L.link_both = "%s est lié(e) avec %s"
+L.link_removed = "Lien enlevé"
+
+-- Abbreviated numbers
+L.amount_one = "%dB"
+L.amount_two = "%dM"
+L.amount_three = "%dK"

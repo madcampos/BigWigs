@@ -3,10 +3,10 @@
 -- Module Declaration
 --
 
-local mod, CL = BigWigs:NewBoss("Withered J'im", -1015, 1796)
+local mod = BigWigs:NewBoss("Withered J'im", -1015, 1796)
 if not mod then return end
 mod:RegisterEnableMob(102075, 112350) -- Withered J'im, Clone
-mod.otherMenu = 1007
+mod.otherMenu = -1007
 mod.worldBoss = 102075
 
 --------------------------------------------------------------------------------
@@ -56,8 +56,7 @@ end
 -- Event Handlers
 --
 
-function mod:MarkBoss(event, unit)
-	local guid = UnitGUID(unit)
+function mod:MarkBoss(event, unit, guid)
 	local mobId = self:MobId(guid)
 	if mobId == 102075 then
 		SetRaidTarget(unit, 8)

@@ -208,8 +208,7 @@ function mod:MobDeath(args)
 	end
 end
 
-function mod:WispMark(event, unit)
-	local guid = UnitGUID(unit)
+function mod:WispMark(event, unit, guid)
 	if self:MobId(guid) == 106659 and UnitIsEnemy("player", unit) and not wispMarked[guid] then
 		local icon = next(wispMarks)
 		if icon then -- At least one icon unused
@@ -406,7 +405,7 @@ do
 		if t-prev > 4 then
 			prev = t
 			local spellText = CL.count:format(args.spellName, getMobNumber(105468, args.sourceGUID))
-			self:Bar(226821, self:Mythic() and 6.1 or 3, CL.cast:format(spellText))
+			self:CastBar(226821, self:Mythic() and 6.1 or 3, spellText)
 			self:ScheduleTimer("Bar", 6.1, 226821, 27, spellText)
 		end
 	end
@@ -416,7 +415,7 @@ end
 function mod:RottenBreath(args)
 	if self:GetOption("custom_off_multiple_breath_bar") or (mobCount[105494]-drakeDeaths == 1) or (drakeDeaths+1 == getMobNumber(105494, args.sourceGUID)) then
 		local spellText = CL.count:format(args.spellName, getMobNumber(105494, args.sourceGUID))
-		self:Bar(args.spellId, 5.5, CL.cast:format(spellText))
+		self:CastBar(args.spellId, 5.5, spellText)
 		self:CDBar(args.spellId, 25, spellText)
 	end
 end

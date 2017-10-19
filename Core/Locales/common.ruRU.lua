@@ -19,7 +19,7 @@ L.custom_start = "%s вступает в бой - %s через %d мин"
 L.custom_start_s = "%s вступает в бой - %s через %d сек"
 L.duration = "%s для %s сек"
 L.focus_only = "|cffff0000Оповещения только для фокуса.|r "
-L.general = "Общее"
+L.general = "Общее" -- General settings, i.e. things that apply to normal, heroic and mythic mode.
 L.hard = "Сложный режим"
 L.heroic = "Героический режим"
 L.incoming = "%s на подходе!"
@@ -38,6 +38,8 @@ L.other = "%s: %s"
 L.over = "%s завершается!"
 L.phase = "Фаза %d"
 L.removed = "%s снято"
+L.removed_from = "%s Снято С %s"
+L.removed_by = "%s был снят %s" -- spell removed by player
 L.small_adds = "Маленькие помощники"
 L.soon = "%s скоро!"
 L.spawned = "Появление: %s"
@@ -49,7 +51,20 @@ L.trash = "Трэш"
 L.underyou = "%s под ТОБОЙ!"
 L.you = "%s на ТЕБЕ"
 
+L.active = "Активен" -- When a boss becomes active, after speech finishes
+
 -- Common raid marking locale
 L.marker = "метка %s"
 L.marker_player_desc = "Отмечать игроков, затронутых %s меткой %s, требуется быть помощником или лидером рейда."
 L.marker_npc_desc = "Отмечать %s метрой %s, требуется быть помощником или лидером рейда."
+
+-- Ability where two players have to move close to each other
+L.link = "Связан с %s"
+L.link_short = "Связь: %s"
+L.link_both = "%s связан с %s"
+L.link_removed = "Связь прервана"
+
+-- Abbreviated numbers
+L.amount_one = "%dB"
+L.amount_two = "%dM"
+L.amount_three = "%dK"

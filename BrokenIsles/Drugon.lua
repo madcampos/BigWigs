@@ -6,7 +6,7 @@
 local mod, CL = BigWigs:NewBoss("Drugon the Frostblood", -1024, 1789)
 if not mod then return end
 mod:RegisterEnableMob(110378)
-mod.otherMenu = 1007
+mod.otherMenu = -1007
 mod.worldBoss = 110378
 
 --------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ end
 --
 
 do
-	local function printTarget(self, player, guid)
+	local function printTarget(self, player)
 		self:TargetMessage(219803, player, "Positive")
 	end
 	function mod:IceHurl(args)

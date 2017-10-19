@@ -178,6 +178,9 @@ do
 		[152] = true, -- Garrosh defeat
 		[294] = true, -- Archimonde portal
 		[295] = true, -- Archimonde kill
+		[549] = true, -- Gul'dan kill
+		[656] = true, -- Kil'jaeden kill
+		[682] = true, -- L'uras death
 	}
 
 	function plugin:PLAY_MOVIE(_, id)
@@ -210,6 +213,7 @@ do
 		["993:4"] = true, -- Grimrail Depot, destroying the train
 		["994:3"] = true, -- Highmaul, Kargath Death
 		["1042:1"] = true, -- Maw of Souls, after Ymiron
+		["1147:6"] = true, -- Tomb of Sargeras, portal to Kil'jaeden
 	}
 
 	-- Cinematic skipping hack to workaround an item (Vision of Time) that creates cinematics in Siege of Orgrimmar.

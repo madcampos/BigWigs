@@ -346,12 +346,12 @@ end
 
 function mod:BellowingRoar(args)
 	self:Message(args.spellId, "Important", "Alarm", CL.casting:format(args.spellName))
-	self:Bar(args.spellId, 6, CL.cast:format(args.spellName))
+	self:CastBar(args.spellId, 6)
 	self:Bar(args.spellId, 51)
 end
 
 --[[ Mythic ]]--
-function mod:NightmareSouls(args)
+function mod:NightmareSouls()
 	local spell = mythicAdd == 1 and 214610 or mythicAdd == 2 and 214588 or 214604 -- Dream Essence: Hinterlands / Ashenvale / Feralas
 	local percentage = mythicAdd == 1 and "90% - " or mythicAdd == 2 and "60% - " or "30% - "
 	self:Message(-13460, "Neutral", "Long", percentage .. self:SpellName(spell), spell)

@@ -149,7 +149,7 @@ do
 						if v == db.font then return i end
 					end
 				end,
-				set = function(info, value)
+				set = function(_, value)
 					db.font = media:List("font")[value]
 					plugin:RestyleWindow(true)
 				end,
@@ -350,7 +350,7 @@ do
 				local tbl = class and colorTbl[class] or GRAY_FONT_COLOR
 				roleColoredList[unit] = ("%s|cFF%02x%02x%02x%s|r"):format(roleIcons[UnitGroupRolesAssigned(unit)], tbl.r*255, tbl.g*255, tbl.b*255, name)
 			end
-			updater = plugin:ScheduleRepeatingTimer(UpdateDisplay, 2)
+			updater = plugin:ScheduleRepeatingTimer(UpdateDisplay, 1)
 		end
 
 		if repeatSync then
@@ -496,7 +496,8 @@ do
 	function UpdateDisplay()
 		for i = 1, maxPlayers do
 			local unit = unitList[i]
-			powerList[unit] = syncPowerList and (syncPowerList[unit] or -1) or UnitPower(unit, 10) -- ALTERNATE_POWER_INDEX = 10
+			-- If we don't have sync data (players not using BigWigs) use whatever (potentially incorrect) data Blizz gives us.
+			powerList[unit] = syncPowerList and syncPowerList[unit] or UnitPower(unit, 10) -- Enum.PowerType.Alternate = 10
 		end
 		tsort(sortedUnitList, sortTbl)
 		for i = 1, db.expanded and 25 or 10 do
@@ -566,7 +567,7 @@ end
 do
 	local power = -1
 	local function sendPower()
-		local newPower = UnitPower("player", 10) -- ALTERNATE_POWER_INDEX = 10
+		local newPower = UnitPower("player", 10) -- Enum.PowerType.Alternate = 10
 		if newPower ~= power then
 			power = newPower
 			plugin:Sync("AltPower", newPower)
@@ -575,7 +576,7 @@ do
 
 	function plugin:RosterUpdateForHiddenDisplay()
 		-- This is for people that don't show the AltPower display (event isn't registered to the display as it normally would be).
-		-- It will force sending the current power for those that do have the display shown but just had their power list reset by a 
+		-- It will force sending the current power for those that do have the display shown but just had their power list reset by a
 		-- GROUP_ROSTER_UPDATE. Or someone DCd and is logging back on, so send an update.
 		if not IsInGroup() then plugin:Close() return end
 		self:CancelTimer(repeatSync)

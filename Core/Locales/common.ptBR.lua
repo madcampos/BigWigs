@@ -23,11 +23,14 @@ L.normal = "Modo normal"
 L.heroic = "Modo heroico"
 L.hard = "Modo Difícil"
 L.mythic = "Modo mítico"
-L.general = "Geral"
+--L.active = "Active" -- When a boss becomes active, after speech finishes
+L.general = "Geral" -- General settings, i.e. things that apply to normal, heroic and mythic mode.
 
 L.duration = "%s durante %s seg"
 L.over = "%s Acabou!"
 L.removed = "%s Removido"
+--L.removed_from = "%s Removed From %s"
+--L.removed_by = "%s removed by %s" -- spell removed by player
 L.incoming = "%s Chegando!"
 L.interrupted = "%s Interrompido"
 L.no = "Sem %s!"
@@ -62,3 +65,14 @@ L.trash = "Trash"
 L.marker = "Marcador %s"
 L.marker_player_desc = "Marca jogadores afetados por %s com %s, requer líder ou assistente."
 L.marker_npc_desc = "Marca %s com %s, requer líder ou assistente."
+
+-- Ability where two players have to move close to each other
+--L.link = "Linked with %s"
+--L.link_short = "Linked: %s"
+--L.link_both = "%s linked with %s"
+--L.link_removed = "Link removed"
+
+-- Abbreviated numbers
+--L.amount_one = "%dB"
+--L.amount_two = "%dM"
+--L.amount_three = "%dK"

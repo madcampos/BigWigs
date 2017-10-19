@@ -121,7 +121,8 @@ local function targetSeen(unit, targetModule, mobId, noSync)
 	if type(targetModule) == "string" then
 		shouldReallyEnable(unit, targetModule, mobId, noSync)
 	else
-		for i, module in next, targetModule do
+		for i = 1, #targetModule do
+			local module = targetModule[i]
 			shouldReallyEnable(unit, module, mobId, noSync)
 		end
 	end
@@ -144,15 +145,12 @@ end
 local function zoneChanged()
 	local id
 	if not IsInInstance() then
-		-- We may be hearthing whilst a module is enabled and engaged, only wipe if we're a ghost (released spirit from an old zone).
-		if UnitIsDeadOrGhost("player") then
-			for _, module in next, bossCore.modules do
-				if module.isEngaged then
-					module:Wipe()
-				end
-			end
+		local mapId = GetPlayerMapAreaID("player")
+		if mapId then
+			id = -mapId
 		else
-			id = -(GetPlayerMapAreaID("player") or 0)
+			local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
+			id = instanceId
 		end
 	else
 		local _, _, _, _, _, _, _, instanceId = GetInstanceInfo()
@@ -317,8 +315,6 @@ do
 		db.RegisterCallback(self, "OnProfileReset", profileUpdate)
 		self.db = db
 
-		self.db.profile.raidicon = nil -- XXX temp [v7.0]
-
 		self.ADDON_LOADED = InitializeModules
 		InitializeModules()
 	end
@@ -367,6 +363,11 @@ function addon:Print(msg)
 	print("BigWigs: |cffffff00"..msg.."|r")
 end
 
+function addon:Error(msg)
+	self:Print(msg)
+	geterrorhandler()(msg)
+end
+
 -------------------------------------------------------------------------------
 -- API - if anything else is exposed on the BigWigs object, that's a mistake!
 -- Well .. except the module API, obviously.
@@ -381,8 +382,8 @@ do
 	end
 
 	-- Adding core generic toggles
-	addon:RegisterBossOption("berserk", L.berserk, L.berserk_desc, nil, "Interface\\Icons\\spell_shadow_unholyfrenzy")
-	addon:RegisterBossOption("altpower", L.altpower, L.altpower_desc, nil, "Interface\\Icons\\spell_arcane_invocation")
+	addon:RegisterBossOption("berserk", L.berserk, L.berserk_desc, nil, 136224) -- 136224 = "Interface\\Icons\\spell_shadow_unholyfrenzy"
+	addon:RegisterBossOption("altpower", L.altpower, L.altpower_desc, nil, 429383) -- 429383 = "Interface\\Icons\\spell_arcane_invocation"
 	addon:RegisterBossOption("infobox", L.infobox, L.infobox_desc)
 	addon:RegisterBossOption("stages", L.stages, L.stages_desc)
 	addon:RegisterBossOption("warmup", L.warmup, L.warmup_desc)
@@ -411,11 +412,11 @@ do
 	local GetSpellInfo, EJ_GetSectionInfo = GetSpellInfo, EJ_GetSectionInfo
 
 	local errorAlreadyRegistered = "%q already exists as a module in BigWigs, but something is trying to register it again."
-	local function new(core, moduleName, mapId, journalId, ...)
+	local function new(core, moduleName, mapId, journalId, instanceId)
 		if core:GetModule(moduleName, true) then
 			addon:Print(errorAlreadyRegistered:format(moduleName))
 		else
-			local m = core:NewModule(moduleName, ...)
+			local m = core:NewModule(moduleName)
 			initModules[#initModules+1] = m
 
 			-- Embed callback handler
@@ -429,17 +430,18 @@ do
 
 			m.zoneId = mapId
 			m.journalId = journalId
+			m.instanceId = instanceId
 			return m, CL
 		end
 	end
 
 	-- A wrapper for :NewModule to present users with more information in the
 	-- case where a module with the same name has already been registered.
-	function addon:NewBoss(moduleName, zoneId, ...)
-		return new(bossCore, moduleName, zoneId, ...)
+	function addon:NewBoss(moduleName, zoneId, journalId, instanceId)
+		return new(bossCore, moduleName, zoneId, journalId, instanceId)
 	end
-	function addon:NewPlugin(moduleName, ...)
-		return new(pluginCore, moduleName, nil, nil, ...)
+	function addon:NewPlugin(moduleName)
+		return new(pluginCore, moduleName)
 	end
 
 	function addon:IterateBossModules() return bossCore:IterateModules() end
@@ -459,7 +461,7 @@ do
 				proximity = C.PROXIMITY,
 				altpower = C.ALTPOWER,
 				infobox = C.INFOBOX,
-			}, {__index = function(self, key)
+			}, {__index = function()
 				return C.BAR + C.MESSAGE + C.VOICE
 			end})
 		end
@@ -473,12 +475,12 @@ do
 				elseif type(v) == "number" then
 					if v > 0 then
 						local n = GetSpellInfo(v)
-						if not n then error(("Invalid spell ID %d in the optionHeaders for module %s."):format(v, module.name)) end
-						module.optionHeaders[k] = n
+						if not n then addon:Error(("Invalid spell ID %d in the optionHeaders for module %s."):format(v, module.name)) end
+						module.optionHeaders[k] = n or v
 					else
 						local n = EJ_GetSectionInfo(-v)
-						if not n then error(("Invalid journal ID (-)%d in the optionHeaders for module %s."):format(-v, module.name)) end
-						module.optionHeaders[k] = n
+						if not n then addon:Error(("Invalid journal ID (-)%d in the optionHeaders for module %s."):format(-v, module.name)) end
+						module.optionHeaders[k] = n or v
 					end
 				end
 			end
@@ -519,11 +521,11 @@ do
 				elseif t == "number" then
 					if v > 0 then
 						local n = GetSpellInfo(v)
-						if not n then error(("Invalid spell ID %d in the toggleOptions for module %s."):format(v, module.name)) end
+						if not n then addon:Error(("Invalid spell ID %d in the toggleOptions for module %s."):format(v, module.name)) end
 						module.toggleDefaults[v] = bitflags
 					else
 						local n = EJ_GetSectionInfo(-v)
-						if not n then error(("Invalid journal ID (-)%d in the toggleOptions for module %s."):format(-v, module.name)) end
+						if not n then addon:Error(("Invalid journal ID (-)%d in the toggleOptions for module %s."):format(-v, module.name)) end
 						module.toggleDefaults[v] = bitflags
 					end
 				end
@@ -559,7 +561,7 @@ do
 
 		self:SendMessage("BigWigs_BossModuleRegistered", module.moduleName, module)
 
-		local id = module.worldBoss and module.zoneId or GetAreaMapInfo(module.zoneId)
+		local id = module.worldBoss and module.zoneId or module.instanceId or GetAreaMapInfo(module.zoneId)
 		if not enablezones[id] then
 			enablezones[id] = true
 		end

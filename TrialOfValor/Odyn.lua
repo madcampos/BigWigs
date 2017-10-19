@@ -184,7 +184,7 @@ end
 -- Event Handlers
 --
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(unit, spellName, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(_, _, _, _, spellId)
 	if spellId == 229168 then -- Test for Players (Phase 1 end)
 		phase = 2
 		self:Message("stages", "Neutral", "Long", CL.stage:format(2), false)
@@ -276,7 +276,7 @@ do
 	local protected = mod:SpellName(229584)
 	function mod:UnerringBlast(args)
 		self:Message(args.spellId, "Urgent", "Alert", CL.casting:format(args.spellName))
-		self:Bar(args.spellId, 3, CL.cast:format(args.spellName))
+		self:CastBar(args.spellId, 3)
 		self:Bar(227503, self:Easy() and 45 or 35) -- Draw Power
 		self:Bar(args.spellId, self:Easy() and 78 or (self:Mythic() and (phase == 2 and 69 or 68)) or 73)
 
@@ -321,7 +321,7 @@ end
 function mod:HornOfValor(args)
 	castingHorn = true
 	self:Message(args.spellId, "Urgent", "Alert", CL.casting:format(args.spellName))
-	self:Bar(args.spellId, 4.5, CL.cast:format(CL.count:format(args.spellName, hornCount)))
+	self:CastBar(args.spellId, self:Easy() and 5 or 4.5, CL.count:format(args.spellName, hornCount))
 	hornCount = hornCount + 1
 
 	local t = 0
@@ -353,7 +353,7 @@ function mod:StormOfJusticeSuccess(args)
 	stormCount = stormCount + 1
 end
 
-function mod:ValarjarsBond(args)
+function mod:ValarjarsBond()
 	self:TargetMessage(228018, "Positive", "Long")
 end
 
@@ -369,18 +369,18 @@ function mod:StormforgedSpear(args)
 	self:TargetBar(args.spellId, 6, args.destName)
 	self:Bar(args.spellId, spearCount % 3 == 0 and 13.5 or 11)
 	self:PrimaryIcon(args.spellId, args.destName)
-	
+
 	if self:Me(args.destGUID) then
 		self:Say(args.spellId)
 	end
 	spearCount = spearCount + 1
 end
 
-function mod:StormforgedSpearDebuff(args)
+function mod:StormforgedSpearDebuff()
 	self:PrimaryIcon(228918)
 end
 
-function mod:ExpelLightSuccess(args)
+function mod:ExpelLightSuccess()
 	expelCount = expelCount + 1
 
 	local t = 0

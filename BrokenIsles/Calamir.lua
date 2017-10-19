@@ -1,6 +1,3 @@
--- TODO LIST
--- - Timers need to be checked
--- - Tuning sounds / message colors
 
 --------------------------------------------------------------------------------
 -- Module Declaration
@@ -9,7 +6,7 @@
 local mod, CL = BigWigs:NewBoss("Calamir", -1015, 1774)
 if not mod then return end
 mod:RegisterEnableMob(109331)
-mod.otherMenu = 1007
+mod.otherMenu = -1007
 mod.worldBoss = 109331
 
 --------------------------------------------------------------------------------
@@ -150,7 +147,7 @@ do
 	end
 end
 
-function mod:BurningBombSuccess(args)
+function mod:BurningBombSuccess()
 	if burningBombCount == 1 then
 		self:CDBar(217877, 13.4)
 	end
